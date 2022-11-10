@@ -53,7 +53,10 @@ Route::post('/snapscan/webhook', [SnapScanController::class, 'WebHook'])
     ->name('snapscan.webhook');
 
 
-Route::get('/snapscan', [SnapScanController::class, 'Index'])
+Route::get('/snapscan/live', [SnapScanController::class, 'Index'])
+    ->name('snapscan.payment');
+
+Route::get('/snapscan', [SnapScanController::class, 'StaticIndex'])
     ->name('snapscan.payment');
 
 Route::middleware([

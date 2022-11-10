@@ -13,7 +13,7 @@ class SnapScanController extends Controller
 {
 
 
-    //Load index page with config
+    //Load live index page with config
     public function Index(): \Inertia\Response
     {
         $flo_settings = FloSettings::find(1);
@@ -25,6 +25,24 @@ class SnapScanController extends Controller
             'machine' => $flo_machine,
             'price' => $unit_price,
             'snap_url' => $base_url,
+        ]);
+    }
+
+    //Load live static index page with config
+    public function StaticIndex(): \Inertia\Response
+    {
+        $flo_settings = FloSettings::find(1);
+        $flo_machine = $flo_settings->machine;
+        $unit_price = "$flo_settings->unit_price";
+        $base_url = "https://pos.snapscan.io/qr/" . $flo_settings->snap_code . ".svg?";
+
+        $button_url = "https://pos.snapscan.io/qr/" . $flo_settings->snap_code . "?";
+
+        return Inertia::render('SnapScanStatic', [
+            'machine' => $flo_machine,
+            'price' => $unit_price,
+            'snap_url' => $base_url,
+            'snap_button_url' => $button_url,
         ]);
     }
 

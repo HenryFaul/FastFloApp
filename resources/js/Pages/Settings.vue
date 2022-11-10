@@ -145,6 +145,17 @@ const updateSettingsInformation = () => {
                                         <InputError :message="form.errors.unit_price" class="mt-2"/>
                                     </div>
 
+                                    <!-- Snap Code -->
+                                    <div class="col-span-6 sm:col-span-4">
+                                        <InputLabel for="name" value="Snap Code"/>
+                                        <TextInput
+                                            id="snap_code"
+                                            v-model="form.snap_code"
+                                            type="text"
+                                            class="mt-1 block w-full"
+                                        />
+                                        <InputError :message="form.errors.snap_api_key" class="mt-2"/>
+                                    </div>
                                     <!-- Snap API key -->
                                     <div class="col-span-6 sm:col-span-4">
                                         <InputLabel for="name" value="Snap API key"/>
