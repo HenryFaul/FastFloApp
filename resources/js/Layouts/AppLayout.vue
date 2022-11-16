@@ -11,6 +11,7 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 
 defineProps({
     title: String,
+    logo:String
 });
 
 const showingNavigationDropdown = ref(false);
@@ -43,7 +44,7 @@ const logout = () => {
                             <!-- Logo -->
                             <div class="shrink-0 flex items-center">
                                 <Link :href="route('dashboard')">
-                                    <ApplicationMark class="block h-9 w-auto" />
+                                    <ApplicationMark :logo="logo" class="block h-9 w-auto" />
                                 </Link>
                             </div>
 

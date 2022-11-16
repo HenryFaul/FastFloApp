@@ -20,6 +20,7 @@ class FloSettings extends Model
         'snap_code',
         'snap_api_key',
         'snap_webhook_key',
-        'flo_active'
+        'flo_active',
+        'ngrok_api_token'
     ];
 }

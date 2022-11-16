@@ -18,11 +18,15 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
+
+    $logo = asset('logos/flo.png');
+
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
+        'logo'=>$logo
     ]);
 });
 
@@ -46,8 +50,9 @@ Route::middleware([
 
 });
 
-Route::post('/snapscan/test', [SnapScanController::class, 'Payment'])
+Route::post('/snapscan/pay', [SnapScanController::class, 'Payment'])
     ->name('payment.notification');
+
 
 Route::post('/snapscan/webhook', [SnapScanController::class, 'WebHook'])
     ->name('snapscan.webhook');

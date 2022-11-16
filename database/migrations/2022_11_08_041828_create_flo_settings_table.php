@@ -32,6 +32,7 @@ return new class extends Migration
             $table->string('snap_code');
             $table->string('snap_api_key');
             $table->string('snap_webhook_key');
+            $table->string('ngrok_api_token');
             $table->boolean('flo_active');
             $table->timestamps();
         });

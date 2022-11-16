@@ -3,6 +3,7 @@ import { Head, Link } from '@inertiajs/inertia-vue3';
 
 defineProps({
     title: String,
+    logo: String,
 });
 
 

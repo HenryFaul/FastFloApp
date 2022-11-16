@@ -38,6 +38,7 @@ const form = useForm({
     snap_api_key:props.flo_settings.snap_api_key,
     snap_webhook_key:props.flo_settings.snap_webhook_key,
     flo_active:props.flo_settings.flo_active,
+    ngrok_api_token:props.flo_settings.ngrok_api_token
 
 
 });
@@ -179,6 +180,18 @@ const updateSettingsInformation = () => {
                                             class="mt-1 block w-full"
                                         />
                                         <InputError :message="form.errors.snap_webhook_key" class="mt-2"/>
+                                    </div>
+
+                                    <!-- Ngrok api key -->
+                                    <div class="col-span-6 sm:col-span-4">
+                                        <InputLabel for="ngrok_api_token" value="Ngrok API key"/>
+                                        <TextInput
+                                            id="ngrok_api_token"
+                                            v-model="form.ngrok_api_token"
+                                            type="text"
+                                            class="mt-1 block w-full"
+                                        />
+                                        <InputError :message="form.errors.ngrok_api_token" class="mt-2"/>
                                     </div>
 
 

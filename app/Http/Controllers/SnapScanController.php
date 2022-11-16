@@ -17,6 +17,30 @@ class SnapScanController extends Controller
     public function Index(): \Inertia\Response
     {
         $flo_settings = FloSettings::find(1);
+        $ngrok_running=false;
+
+        $headers = [
+            'authorization' => 'Bearer '.$flo_settings->ngrok_api_token,
+            'ngrok-version' => '2'
+        ];
+
+        $url='https://api.ngrok.com/tunnels';
+
+        $response = Http::withHeaders($headers)->get($url);
+
+        if ($response->successful()){
+
+            $tunnels = json_decode($response->body());
+
+            if(!empty($tunnels->tunnels)){
+                $public_url = $tunnels->tunnels[0]->public_url;
+                $flo_settings->flo_url=$public_url."/api/v1/dispenser/x/pour/y";
+                $flo_settings->save();
+                $ngrok_running=true;
+            }
+
+        }
+
         $flo_machine = $flo_settings->machine;
         $unit_price = "$flo_settings->unit_price";
         $base_url = "https://pos.snapscan.io/qr/" . $flo_settings->snap_code . ".svg?";
@@ -25,17 +49,44 @@ class SnapScanController extends Controller
             'machine' => $flo_machine,
             'price' => $unit_price,
             'snap_url' => $base_url,
+            'ngrok_running'=>$ngrok_running
         ]);
     }
 
-    //Load live static index page with config
+    //Load  static index page with config
     public function StaticIndex(): \Inertia\Response
     {
         $flo_settings = FloSettings::find(1);
+        $ngrok_running=false;
+
+        $headers = [
+            'authorization' => 'Bearer '.$flo_settings->ngrok_api_token,
+            'ngrok-version' => '2'
+        ];
+
+        $url='https://api.ngrok.com/tunnels';
+
+        $response = Http::withHeaders($headers)->get($url);
+
+
+
+        if ($response->successful()){
+
+            $tunnels = json_decode($response->body());
+
+            if(!empty($tunnels->tunnels)){
+                $public_url = $tunnels->tunnels[0]->public_url;
+                $flo_settings->flo_url=$public_url."/api/v1/dispenser/x/pour/y";
+                $flo_settings->save();
+                $ngrok_running=true;
+            }
+
+        }else{
+
+        }
         $flo_machine = $flo_settings->machine;
         $unit_price = "$flo_settings->unit_price";
         $base_url = "https://pos.snapscan.io/qr/" . $flo_settings->snap_code . ".svg?";
-
         $button_url = "https://pos.snapscan.io/qr/" . $flo_settings->snap_code . "?";
 
         return Inertia::render('SnapScanStatic', [
@@ -43,6 +94,7 @@ class SnapScanController extends Controller
             'price' => $unit_price,
             'snap_url' => $base_url,
             'snap_button_url' => $button_url,
+            'ngrok_running'=>$ngrok_running
         ]);
     }
 
@@ -92,9 +144,18 @@ class SnapScanController extends Controller
 
                                 $poll_snap = false;
                                 $response = $this->PourDrinks($du_no, $qty);
-                                Log::info("Processed payment: " . $payment_ref);
-                                Redirect::back()->with(['status' => 'success', 'style' => 'bg-blue-100 rounded-lg py-5 px-6 mb-4 text-base text-blue-700 mb-3', 'message' => 'Payment is successful. We are pouring ' . $qty . ' drinks [' . $payment_ref . '].', 'cur_payment_ref' => $payment_ref]);
-                            }
+
+                                if ($response==="true"){
+                                    Log::info("Processed payment and machine true: " . $payment_ref);
+                                    Redirect::back()->with(['status' => 'success', 'style' => 'bg-blue-100 rounded-lg py-5 px-6 mb-4 text-base text-blue-700 mb-3', 'message' => 'Payment is successful. We are pouring' . $qty . ' drinks [' . $payment_ref . '].', 'cur_payment_ref' => $payment_ref]);
+                                }
+                                else{
+                                    Log::info("Processed payment. Issue with machine: " . $payment_ref);
+                                    Redirect::back()->with(['status' => 'success', 'style' => 'bg-blue-100 rounded-lg py-5 px-6 mb-4 text-base text-blue-700 mb-3', 'message' => 'Payment is successful. Issue with pouring ' . $qty . ' drinks [' . $payment_ref . '].', 'cur_payment_ref' => $payment_ref]);
+
+                                }
+
+                      }
 
                             //return error if error
                             if ($pay->status == 'error') {
@@ -141,6 +202,18 @@ class SnapScanController extends Controller
     public function Tester(Request $request)
     {
 
+        $payment_ref = $request->get('paymentRef');
+
+        $url ="http://localhost/api/v1/dispenser/x/pour/y";
+
+        $x='DU1';
+        $y='4';
+
+        //to replace, with replace, og string
+        $url=str_replace('x', $x, $url);
+        $url=str_replace('y', $y, $url);
+
+        dd($url);
         sleep(10);
         Redirect::back()->with(['status' => 'error', 'style' => 'bg-red-100 rounded-lg py-5 px-6 mb-4 text-base text-red-700 mb-3', 'message' => 'Payment error. Please try again.']);
     }
@@ -158,15 +231,18 @@ class SnapScanController extends Controller
         y = number of pours*/
 
         $flo_settings = FloSettings::find(1);
-
         $url = $flo_settings->flo_url;
 
-        str_replace($url, "x", $x);
-        str_replace($url, "y", $y);
+        //to replace, with replace, og string
+        $url=str_replace('x', $x, $url);
+        $url=str_replace('y', $y, $url);
 
         if ($flo_settings->flo_active) {
             $response = Http::get($url);
             return $response->body();
+        }
+        else{
+            return "Flo not active on app";
         }
 
     }
