@@ -1,7 +1,7 @@
 <script setup>
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import {useForm} from "@inertiajs/inertia-vue3";
-import PrimaryButton from '@/Components/PrimaryButton.vue';
+import PrimaryButton from '@/Components/SnapButton.vue';
 import DangerButton from '@/Components/DangerButton.vue';
 import {computed, reactive, ref} from "vue";
 import {Inertia} from "@inertiajs/inertia";
@@ -82,9 +82,9 @@ const submitPay = () => {
 
                     <div>
 
-                        <div class="p-6 sm:px-20 bg-gray-400 border-b border-gray-200">
+                        <div class="p-6 sm:px-20 bg-white border-b border-gray-200">
                             <div class="flex justify-center">
-                                <img :src="$page.props.app_logo" alt="logo">
+                                <img :src="$page.props.app_logo_dark" alt="logo">
                             </div>
                         </div>
 
@@ -109,11 +109,11 @@ const submitPay = () => {
                                                 </tr>
                                                 <tr class="">
                                                     <td class="">
-                                                        <button @click="increaseQty()" type="button"
-                                                                class="inline-block px-6 py-2 border-2 border-blue-600 text-blue-600 font-medium text-xs leading-tight uppercase rounded-full hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out">
-                                                            <div class="text-xl font-bold">+</div>
-                                                        </button>
 
+                                                        <button @click="decreaseQty()" type="button"
+                                                                class="inline-block px-6 py-2.5 bg-yellow-500 text-white font-medium text-xs leading-tight uppercase rounded-full shadow-md hover:bg-yellow-600 hover:shadow-lg focus:bg-yellow-600 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-yellow-700 active:shadow-lg transition duration-150 ease-in-out">
+                                                            <div class="text-xl font-bold">-</div>
+                                                        </button>
                                                     </td>
                                                     <td>
                                                         <div class="text-6xl font-bold flex justify-center">
@@ -121,10 +121,11 @@ const submitPay = () => {
                                                         </div>
                                                     </td>
                                                     <td class="">
-                                                        <button @click="decreaseQty()" type="button"
-                                                                class="inline-block px-6 py-2 border-2 border-yellow-500 text-yellow-500 font-medium text-xs leading-tight uppercase rounded-full hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out">
-                                                            <div class="text-xl font-bold">-</div>
+                                                        <button @click="increaseQty()" type="button"
+                                                                class="inline-block px-6 py-2.5 bg-yellow-500 text-white font-medium text-xs leading-tight uppercase rounded-full shadow-md hover:bg-yellow-600 hover:shadow-lg focus:bg-yellow-600 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-yellow-700 active:shadow-lg transition duration-150 ease-in-out">
+                                                            <div class="text-xl font-bold">+</div>
                                                         </button>
+
 
                                                     </td>
                                                 </tr>
@@ -146,7 +147,8 @@ const submitPay = () => {
                                                             <PrimaryButton @click="submitPay" class="ml-4"
                                                                            :class="{ 'opacity-25': form.processing }"
                                                                            :disabled="form.processing">
-                                                                PayNow (SnapScan)
+                                                                Pay with
+                                                                <img  :src="$page.props.snap_scan" style="width: 200px" alt="logo"/>
                                                             </PrimaryButton>
                                                         </div>
                                                     </td>

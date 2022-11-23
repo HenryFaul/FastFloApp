@@ -37,9 +37,13 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         $logo = asset('logos/flo.png');
+        $logo_dark = asset('logos/FastFlo.png');
+        $snap_scan = asset('logos/snapscan.png');
 
         return array_merge(parent::share($request), [
             'app_logo'=>$logo,
+            'snap_scan'=>$snap_scan,
+            'app_logo_dark'=>$logo_dark,
             'Custom_flash' => [
                 'status' => fn () => $request->session()->get('status'),
                 'style' => fn () => $request->session()->get('style'),
