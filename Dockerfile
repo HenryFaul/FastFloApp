@@ -1,5 +1,7 @@
 FROM ubuntu:22.04
 
+LABEL maintainer="Taylor Otwell"
+
 ARG WWWGROUP
 ARG NODE_VERSION=16
 ARG POSTGRES_VERSION=14
@@ -48,8 +50,8 @@ RUN apt-get update \
 
 RUN setcap "cap_net_bind_service=+ep" /usr/bin/php8.1
 
-RUN groupadd --force -g 1234 sail
-RUN useradd -ms /bin/bash --no-user-group -g 1234 -u 1337 sail
+RUN groupadd --force -g $WWWGROUP sail
+RUN useradd -ms /bin/bash --no-user-group -g $WWWGROUP -u 1337 sail
 
 COPY start-container /usr/local/bin/start-container
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
@@ -59,5 +61,3 @@ RUN chmod +x /usr/local/bin/start-container
 EXPOSE 8000
 
 ENTRYPOINT ["start-container"]
-
-
