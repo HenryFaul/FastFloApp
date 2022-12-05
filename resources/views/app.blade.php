@@ -6,7 +6,7 @@
 
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
-        <meta name="description" content="The Perfect Beer in Seconcs">
+        <meta name="description" content="The Perfect Beer in Seconds">
         <meta name="keywords" content="FastFlo, Beer, CUPL">
 
         <!--  Essential META Tags -->
@@ -15,8 +15,8 @@
         <meta property="og:url" content="https://pay.cupl.co.za/">
 
         <!--  Non-Essential, But Recommended -->
-        <meta property="og:description" content="Impii Connected Protection">
-        <meta property="og:site_name" content="Impii Connected Protection">
+        <meta property="og:description" content="The Perfect Beer in Seconds">
+        <meta property="og:site_name" content="The Perfect Beer in Seconds">
 
         <meta name="author" content="FastFlo">
 
