@@ -6,6 +6,20 @@
 
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
+        <meta name="description" content="The Perfect Beer in Seconcs">
+        <meta name="keywords" content="FastFlo, Beer, CUPL">
+
+        <!--  Essential META Tags -->
+        <meta property="og:title" content="FastFlo">
+        <meta property="og:image" content="'https://pay.cupl.co.za/logos/flo.png'">
+        <meta property="og:url" content="https://pay.cupl.co.za/">
+
+        <!--  Non-Essential, But Recommended -->
+        <meta property="og:description" content="Impii Connected Protection">
+        <meta property="og:site_name" content="Impii Connected Protection">
+
+        <meta name="author" content="FastFlo">
+
         <!-- Fonts -->
         <link rel="stylesheet" href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap">
 
