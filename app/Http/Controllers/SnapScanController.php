@@ -290,8 +290,6 @@ class SnapScanController extends Controller
         $flo_settings = FloSettings::find(1);
         $url = $flo_settings->flo_url;
 
-        dd($x);
-
         //to replace, with replace, og string
         $url=str_replace('x', $x, $url);
         $url=str_replace('y', $y, $url);
