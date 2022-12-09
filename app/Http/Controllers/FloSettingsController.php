@@ -14,18 +14,21 @@ class FloSettingsController extends Controller
 
         $flo_settings = FloSettings::find(1);
 
+        $all_flo_settings = FloSettings::all();
+
         return Inertia::render('Settings', [
 
             'flo_settings' => $flo_settings,
+            'all_flo_settings'=>$all_flo_settings
         ]);
     }
 
     public function Update(Request $request){
 
 
-       $flo_settings= FloSettings::find(1);
-
         \Illuminate\Support\Facades\Request::validate([
+
+            'selected_setting' => ['required'],
             'machine' => ['required','string'],
             'du_no' => ['required','string'],
             'flo_url' => ['required','string'],
@@ -37,6 +40,10 @@ class FloSettingsController extends Controller
             'flo_active' => ['required','boolean'],
 
         ]);
+
+        $selected_setting = $request->get('selected_setting');
+
+        $flo_settings= FloSettings::find($selected_setting);
 
         $flo_settings->update($request->only('machine', 'du_no', 'flo_url', 'scan_url','unit_price','snap_code','snap_api_key','snap_webhook_key','flo_active'));
 

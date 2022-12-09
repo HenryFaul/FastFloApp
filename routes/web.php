@@ -61,8 +61,12 @@ Route::post('/snapscan/webhook', [SnapScanController::class, 'WebHook'])
 Route::get('/snapscan/live', [SnapScanController::class, 'Index'])
     ->name('snapscan.payment');
 
-Route::get('/snapscan', [SnapScanController::class, 'StaticIndex'])
+/*Route::get('/snapscan', [SnapScanController::class, 'StaticIndex'])
+    ->name('snapscan.payment');*/
+
+Route::get('/snapscan/{id}', [SnapScanController::class, 'DynamicIndex'])
     ->name('snapscan.payment');
+
 
 Route::middleware([
     'auth:sanctum',

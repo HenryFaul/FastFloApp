@@ -221,8 +221,6 @@ const submitPay = () => {
 
                     </div>
 
-
-
                 </div>
             </div>
         </div>

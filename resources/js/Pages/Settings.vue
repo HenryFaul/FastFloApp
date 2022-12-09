@@ -7,7 +7,7 @@ import {computed} from "vue";
 import {usePage} from "@inertiajs/inertia-vue3";
 
 
-import {ref} from 'vue';
+import {ref,reactive} from 'vue';
 import {Inertia} from '@inertiajs/inertia';
 import {Link, useForm} from '@inertiajs/inertia-vue3';
 import ActionMessage from '@/Components/ActionMessage.vue';
@@ -15,40 +15,63 @@ import FormSection from '@/Components/FormSection.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 
 const props = defineProps({
     flo_settings: {
         type: Object,
         required: true
+    },
+    all_flo_settings: {
+        type: Object,
+        required: true
     }
+
 });
 const page_props = computed(() => usePage().props);
 
 
+const selected_setting_id = ref(1)
+const selected_setting_obj = computed(() => props.all_flo_settings[selected_setting_id.value-1])
+
+const changeSetting = () => {
+    form.machine=selected_setting_obj.value.machine
+    form.du_no=selected_setting_obj.value.du_no
+    form.flo_url=selected_setting_obj.value.flo_url
+    form.scan_url=selected_setting_obj.value.scan_url
+    form.unit_price=selected_setting_obj.value.unit_price
+    form.snap_code=selected_setting_obj.value.snap_code
+    form.snap_api_key=selected_setting_obj.value.snap_api_key
+    form.snap_webhook_key=selected_setting_obj.value.snap_webhook_key
+    form.flo_active=selected_setting_obj.value.flo_active
+    form.ngrok_api_token=selected_setting_obj.value.ngrok_api_token
+}
+
+
+
 const form = useForm({
     _method: 'PUT',
-    machine: props.flo_settings.machine,
-    du_no:props.flo_settings.du_no,
-    flo_url:props.flo_settings.flo_url,
-    scan_url:props.flo_settings.scan_url,
-    unit_price:props.flo_settings.unit_price,
-    snap_code:props.flo_settings.snap_code,
-    snap_api_key:props.flo_settings.snap_api_key,
-    snap_webhook_key:props.flo_settings.snap_webhook_key,
-    flo_active:props.flo_settings.flo_active,
-    ngrok_api_token:props.flo_settings.ngrok_api_token
+    selected_setting: selected_setting_id,
+    machine: props.all_flo_settings[0].machine,
+    du_no: props.all_flo_settings[0].du_no,
+    flo_url: props.all_flo_settings[0].flo_url,
+    scan_url: props.all_flo_settings[0].scan_url,
+    unit_price: props.all_flo_settings[0].unit_price,
+    snap_code: props.all_flo_settings[0].snap_code,
+    snap_api_key: props.all_flo_settings[0].snap_api_key,
+    snap_webhook_key: props.all_flo_settings[0].snap_webhook_key,
+    flo_active: props.all_flo_settings[0].flo_active,
+    ngrok_api_token: props.all_flo_settings[0].ngrok_api_token
 
 
 });
 
 const updateSettingsInformation = () => {
 
-     form.post(route('settings.update'), {
-         preserveScroll: true,
-         onSuccess: () => alert('updated'),
-     });
+    form.post(route('settings.update'), {
+        preserveScroll: true,
+        onSuccess: () => alert('updated'),
+    });
 };
 
 </script>
@@ -86,8 +109,42 @@ const updateSettingsInformation = () => {
 
 
                                 <template #form>
+
+
+                                    <!-- Settings -->
+                                    <div class="col-span-6 sm:col-span-4">
+
+                                        <div class="text-2xl mb-2">
+                                            Applicable Setting / {{selected_setting_id}}
+                                        </div>
+
+                                        <InputLabel for="name" value="Selected Setup"/>
+
+                                        <select
+                                            name="selected_setting_id"
+                                            id="selected_setting_id"
+                                            class="min-w-max text-sm text-gray-900 bg-transparent border-2 rounded-xl"
+                                            v-model="selected_setting_id"
+                                            @change="changeSetting"
+                                        >
+                                            <option
+                                                v-for="setting in all_flo_settings"
+                                                :key="setting.id"
+                                                :value="setting.id"
+                                                selected >{{setting.id}} - {{setting.machine}} - {{setting.du_no}}
+                                            </option>
+                                        </select>
+
+
+                                    </div>
+
                                     <!-- Machine -->
                                     <div class="col-span-6 sm:col-span-4">
+
+                                        <div class="text-xl mb-2">
+                                            Settings
+                                        </div>
+
                                         <InputLabel for="name" value="Machine"/>
                                         <TextInput
                                             id="machine"

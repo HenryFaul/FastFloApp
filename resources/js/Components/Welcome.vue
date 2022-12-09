@@ -19,7 +19,21 @@ import { Link } from '@inertiajs/inertia-vue3';
             <div class="mt-6 text-gray-500">
                 To access new payments go to:
 
-                <Link :href="route('snapscan.payment')" class="text-xl font-bold text-gray-700 dark:text-gray-500 underline">SnapScan</Link>
+                <ul class="mt-5">
+                    <li>
+                        <Link :href="route('snapscan.payment','1')" class="text-xl font-bold text-gray-700 dark:text-gray-500 underline">SnapScan DU1</Link>
+
+                    </li>
+
+                    <li>
+                        <Link :href="route('snapscan.payment','2')" class="text-xl font-bold text-gray-700 dark:text-gray-500 underline">SnapScan DU2</Link>
+
+                    </li>
+                </ul>
+
+
+
+
             </div>
         </div>
 

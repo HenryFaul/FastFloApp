@@ -98,12 +98,69 @@ class SnapScanController extends Controller
         ]);
     }
 
+    //Load  dynamic index page with config
+
+    public function DynamicIndex($id): \Inertia\Response
+    {
+
+        $flo_settings = FloSettings::find($id);
+
+        if(is_null($flo_settings)){
+            return abort(404);
+        }
+
+        $ngrok_running=false;
+
+        $headers = [
+            'authorization' => 'Bearer '.$flo_settings->ngrok_api_token,
+            'ngrok-version' => '2'
+        ];
+
+        $url='https://api.ngrok.com/tunnels';
+
+        $response = Http::withHeaders($headers)->get($url);
+
+        if ($response->successful()){
+
+            $tunnels = json_decode($response->body());
+
+            if(!empty($tunnels->tunnels)){
+                $public_url = $tunnels->tunnels[0]->public_url;
+                $flo_settings->flo_url=$public_url."/api/v1/dispenser/x/pour/y";
+                $flo_settings->save();
+                $ngrok_running=true;
+            }
+
+        }else{
+
+        }
+        $flo_machine = $flo_settings->machine;
+        $flo_du = $flo_settings->du_no;
+        $unit_price = "$flo_settings->unit_price";
+        $base_url = "https://pos.snapscan.io/qr/" . $flo_settings->snap_code . ".svg?";
+        $button_url = "https://pos.snapscan.io/qr/" . $flo_settings->snap_code . "?";
+
+        return Inertia::render('SnapScanDynamic', [
+            'machine' => $flo_machine,
+            'du' => $flo_du,
+            'price' => $unit_price,
+            'snap_url' => $base_url,
+            'snap_button_url' => $button_url,
+            'ngrok_running'=>$ngrok_running,
+            'id'=>$id
+        ]);
+    }
+
     //process a new payment
     public function Payment(Request $request)
     {
 
         //find settings
-        $flo_settings = FloSettings::find(1);
+        $flo_settings = FloSettings::find($request->get('id'));
+
+        if(is_null($flo_settings)){
+            return abort(404);
+        }
 
         //apply values
         $payment_ref = $request->get('paymentRef');
@@ -232,6 +289,8 @@ class SnapScanController extends Controller
 
         $flo_settings = FloSettings::find(1);
         $url = $flo_settings->flo_url;
+
+        dd($x);
 
         //to replace, with replace, og string
         $url=str_replace('x', $x, $url);
